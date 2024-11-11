@@ -86,20 +86,19 @@ button:hover {
   transition: transform 0.3s ease-in-out;
 }
 
-/* Opciones Menu - Ajustes de ventana flotante */
 .options-menu {
   background-color: #fff;
   border-radius: 10px;
   padding: 20px;
   width: 300px;
-  position: fixed; /* Lo mantiene fijo en la pantalla */
-  top: 20%; /* Ajuste de posición vertical */
+  position: fixed;
+  top: 20%;
   left: 50%;
-  transform: translateX(-50%); /* Centra horizontalmente */
-  display: none; /* Inicialmente oculto */
+  transform: translateX(-50%);
+  display: none;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
-  z-index: 1000; /* Asegura que esté encima de otros elementos */
+  z-index: 1000;
 }
 
 .options-menu h2 {

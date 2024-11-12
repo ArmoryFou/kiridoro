@@ -208,3 +208,84 @@ function saveSettings() {
   
     resetTimer();
   }
+  function loadAudioOptions() {
+    const audioOptionsContainer = document.getElementById("audioOptions");
+    const audioFolder = './sounds/';
+    const maxAudios = 100;
+    let audios = [];
+  
+    for (let i = 1; i <= maxAudios; i++) {
+      const audioSrc = `${audioFolder}${i}.mp3`;
+      const audio = new Audio();
+      audio.src = audioSrc;
+  
+      audio.oncanplaythrough = () => {
+        audios.push(audioSrc);
+        updateAudioOptions();
+      };
+  
+      audio.onerror = () => {
+        if (i === 1) {
+          audioOptionsContainer.innerHTML = '<p>No se han encontrado audios disponibles.</p>';
+        }
+        return;
+      };
+    }
+  
+    function updateAudioOptions() {
+      audioOptionsContainer.innerHTML = audios.map((src, index) => `
+        <div class="audio-option" id="audio${index}">
+          <button onclick="playAudio('${src}')">▶️</button>
+          <button onclick="setDefaultAudio('${src}')" data-audio="${src}">Audio ${index + 1}</button>
+        </div>
+      `).join('');
+  
+      // Load saved audio selection on page load
+      const savedAudio = getCookie('defaultAudio') || `${audioFolder}1.mp3`;
+      document.getElementById('timerEndSound').src = savedAudio;
+  
+      highlightSelectedAudio(savedAudio);
+    }
+  }
+  
+  // Function to play audio and highlight the option if not already highlighted
+  function playAudio(audioSrc) {
+    const audio = new Audio(audioSrc);
+    audio.play();
+    highlightSelectedAudio(audioSrc);
+  }
+  
+  // Function to set default audio, save it, and visually mark it as selected
+  function setDefaultAudio(audioPath) {
+    const timerEndSound = document.getElementById('timerEndSound');
+    timerEndSound.src = audioPath;
+    document.cookie = `defaultAudio=${audioPath}; path=/`;
+  
+    // Mark the selected audio option
+    highlightSelectedAudio(audioPath);
+  }
+  
+  // Function to highlight the selected audio option
+  function highlightSelectedAudio(audioPath) {
+    const audioOptions = document.querySelectorAll('.audio-option');
+    audioOptions.forEach(option => {
+      const button = option.querySelector('button[data-audio]');
+      if (button && button.getAttribute('data-audio') === audioPath) {
+        option.classList.add('selected');
+      } else {
+        option.classList.remove('selected');
+      }
+    });
+  }
+  
+  // Helper function to get a cookie by name
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  }
+  
+  // Initialize audio options on page load
+  document.addEventListener('DOMContentLoaded', loadAudioOptions);
+  

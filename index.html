@@ -15,7 +15,7 @@
     <button class="options-button" onclick="toggleOptionsMenu()">Opciones</button>
   </div>
   
-  <div class="timer-display">25:00</div>
+  <div class="timer-display"></div>
   <div class="controls">
     <button onclick="toggleTimer()">Start</button>
     <button onclick="resetTimer()">Reset</button>
@@ -33,11 +33,13 @@
     <input type="number" id="longBreakTime" min="1" value="15">
 
     <label for="shortBreaksBeforeLong">Descansos cortos antes de largo:</label>
-<input type="number" id="shortBreaksBeforeLong" min="1" value="4">
-
+    <input type="number" id="shortBreaksBeforeLong" min="1" value="4">
     
     <h3>Selecciona un tema:</h3>
     <div class="theme-options" id="themeOptions"></div>
+
+    <h3>Selecciona un sonido:</h3>
+    <div class="audio-options" id="audioOptions"></div>
     <button onclick="saveSettings()">Guardar</button>
   </div>
 

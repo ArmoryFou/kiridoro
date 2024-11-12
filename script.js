@@ -1,5 +1,5 @@
 let timerType = "Pomodoro";
-let timerDuration = 25 * 60;
+let timerDuration;
 let timer;
 let isRunning = false;
 let themes = [];
@@ -10,6 +10,40 @@ window.onload = function() {
     loadThemes();
     loadSettings();
   };
+
+  function loadSettings() {
+    const pomodoroTime = localStorage.getItem("pomodoroTime") || 25;  // Default to 25 if not set
+    const shortBreakTime = localStorage.getItem("shortBreakTime") || 5;  // Default to 5 if not set
+    const longBreakTime = localStorage.getItem("longBreakTime") || 15;  // Default to 15 if not set
+    const savedTimerType = localStorage.getItem("timerType") || "Pomodoro";
+    const shortBreaksBeforeLong = localStorage.getItem("shortBreaksBeforeLong") || 4;
+    const selectedTheme = localStorage.getItem("selectedTheme");
+
+    // Set values in the input fields
+    document.getElementById("pomodoroTime").value = pomodoroTime;
+    document.getElementById("shortBreakTime").value = shortBreakTime;
+    document.getElementById("longBreakTime").value = longBreakTime;
+    document.getElementById("shortBreaksBeforeLong").value = shortBreaksBeforeLong;
+
+    // Set the timer type and duration based on saved settings
+    timerType = savedTimerType;
+    if (timerType === "Pomodoro") {
+        timerDuration = parseInt(pomodoroTime) * 60;
+    } else if (timerType === "Short Break") {
+        timerDuration = parseInt(shortBreakTime) * 60;
+    } else if (timerType === "Long Break") {
+        timerDuration = parseInt(longBreakTime) * 60;
+    }
+
+    // Apply the saved theme, if any
+    if (selectedTheme) {
+        document.body.style.backgroundImage = selectedTheme;
+        document.documentElement.style.backgroundImage = selectedTheme;
+    }
+
+    // Update the display with the correctly initialized duration
+    updateDisplay();
+}
   
 
 function loadThemes() {
@@ -187,27 +221,6 @@ function saveSettings() {
     resetTimer();
   }
   
-  function loadSettings() {
-    const pomodoroTime = localStorage.getItem("pomodoroTime");
-    const shortBreakTime = localStorage.getItem("shortBreakTime");
-    const longBreakTime = localStorage.getItem("longBreakTime");
-    const shortBreaksBeforeLong = localStorage.getItem("shortBreaksBeforeLong");
-    const timerType = localStorage.getItem("timerType");
-    const selectedTheme = localStorage.getItem("selectedTheme");
-  
-    if (pomodoroTime) document.getElementById("pomodoroTime").value = pomodoroTime;
-    if (shortBreakTime) document.getElementById("shortBreakTime").value = shortBreakTime;
-    if (longBreakTime) document.getElementById("longBreakTime").value = longBreakTime;
-    if (shortBreaksBeforeLong) document.getElementById("shortBreaksBeforeLong").value = shortBreaksBeforeLong;
-  
-    if (timerType) setTimerType(timerType);
-    if (selectedTheme) {
-      document.body.style.backgroundImage = selectedTheme;
-      document.documentElement.style.backgroundImage = selectedTheme;
-    }
-  
-    resetTimer();
-  }
   function loadAudioOptions() {
     const audioOptionsContainer = document.getElementById("audioOptions");
     const audioFolder = './sounds/';
@@ -240,7 +253,6 @@ function saveSettings() {
         </div>
       `).join('');
   
-      // Load saved audio selection on page load
       const savedAudio = getCookie('defaultAudio') || `${audioFolder}1.mp3`;
       document.getElementById('timerEndSound').src = savedAudio;
   
@@ -248,24 +260,20 @@ function saveSettings() {
     }
   }
   
-  // Function to play audio and highlight the option if not already highlighted
   function playAudio(audioSrc) {
     const audio = new Audio(audioSrc);
     audio.play();
     highlightSelectedAudio(audioSrc);
   }
   
-  // Function to set default audio, save it, and visually mark it as selected
   function setDefaultAudio(audioPath) {
     const timerEndSound = document.getElementById('timerEndSound');
     timerEndSound.src = audioPath;
     document.cookie = `defaultAudio=${audioPath}; path=/`;
   
-    // Mark the selected audio option
     highlightSelectedAudio(audioPath);
   }
   
-  // Function to highlight the selected audio option
   function highlightSelectedAudio(audioPath) {
     const audioOptions = document.querySelectorAll('.audio-option');
     audioOptions.forEach(option => {
@@ -278,7 +286,6 @@ function saveSettings() {
     });
   }
   
-  // Helper function to get a cookie by name
   function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -286,6 +293,5 @@ function saveSettings() {
     return null;
   }
   
-  // Initialize audio options on page load
   document.addEventListener('DOMContentLoaded', loadAudioOptions);
   

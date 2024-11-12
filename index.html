@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pomodoro Timer</title>
+  <title>KiriDoro</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <audio id="timerEndSound" src="sounds/kimo.mp3" preload="auto"></audio>
+    <audio id="timerEndSound" src="sounds/1.mp3" preload="auto"></audio>
   <div class="top-bar">
     <button class="timer-type" onclick="setTimerType('Pomodoro')">Pomodoro</button>
     <button class="timer-type" onclick="setTimerType('Short Break')">Short Break</button>
@@ -24,7 +24,7 @@
   <div class="options-menu" id="optionsMenu">
     <h2>Opciones</h2>
     <label for="pomodoroTime">Tiempo Pomodoro (min):</label>
-    <input type="number" id="pomodoroTime" min="1" value="25">
+    <input type="number" id="pomodoroTime" min="1" value="0">
     
     <label for="shortBreakTime">Tiempo Descanso Corto (min):</label>
     <input type="number" id="shortBreakTime" min="1" value="5">
